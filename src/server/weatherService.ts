@@ -90,16 +90,15 @@ export class WeatherService {
       return buildMockWeather(trimmedCity);
     }
 
-    // Placeholder: OpenWeatherMap API Beispielaufruf
-    // Dokumentation: https://openweathermap.org/api
+    // Placeholder: WeatherAPI.com API Beispielaufruf
+    // Dokumentation: https://www.weatherapi.com/docs/
     // Hier wird nur ein Platzhalter-Request ausgeführt, die Antwort wird nicht verarbeitet
-    const apiKey = process.env.OPENWEATHER_API_KEY || "DEMO_KEY";
-    const owUrl = "https://api.openweathermap.org/data/2.5/weather";
-    const owResponse = await axios.get(owUrl, {
+    const apiKey = process.env.WEATHERAPI_KEY || "DEMO_KEY";
+    const weatherApiUrl = "https://api.weatherapi.com/v1/current.json";
+    const weatherApiResponse = await axios.get(weatherApiUrl, {
       params: {
+        key: apiKey,
         q: trimmedCity,
-        appid: apiKey,
-        units: "metric",
         lang: "de"
       }
     });
@@ -108,7 +107,7 @@ export class WeatherService {
     return {
       location: {
         name: trimmedCity,
-        country: "OpenWeatherMap",
+        country: "WeatherAPI.com",
         latitude: 0,
         longitude: 0
       },
@@ -116,7 +115,7 @@ export class WeatherService {
         temperatureC: 0,
         feelsLikeC: 0,
         windSpeedKmh: 0,
-        description: "Platzhalter von OpenWeatherMap API",
+        description: "Platzhalter von WeatherAPI.com API",
         observedAt: new Date().toISOString()
       }
     };
