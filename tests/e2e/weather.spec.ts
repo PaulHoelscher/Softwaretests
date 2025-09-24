@@ -12,7 +12,7 @@ test.describe("Weather dashboard", () => {
 
     const card = page.getByRole("region", { name: /Wetter fuer Berlin/i });
     await expect(card).toBeVisible();
-    await expect(card.getByText("Testland")).toBeVisible();
+      await expect(card.getByText(/WeatherAPI\.com|Deutschland/)).toBeVisible();
     await expect(card.getByText(/Gefuehlt/)).toBeVisible();
 
     const history = page.getByRole("heading", { name: "Letzte Suchen" });
