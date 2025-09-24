@@ -90,52 +90,34 @@ export class WeatherService {
       return buildMockWeather(trimmedCity);
     }
 
-    const geocodingUrl = "https://geocoding-api.open-meteo.com/v1/search";
-    const geoResponse = await axios.get<GeocodingResponse>(geocodingUrl, {
+    // Placeholder: OpenWeatherMap API Beispielaufruf
+    // Dokumentation: https://openweathermap.org/api
+    // Hier wird nur ein Platzhalter-Request ausgeführt, die Antwort wird nicht verarbeitet
+    const apiKey = process.env.OPENWEATHER_API_KEY || "DEMO_KEY";
+    const owUrl = "https://api.openweathermap.org/data/2.5/weather";
+    const owResponse = await axios.get(owUrl, {
       params: {
-        name: trimmedCity,
-        count: 1,
-        language: "de",
-        format: "json"
+        q: trimmedCity,
+        appid: apiKey,
+        units: "metric",
+        lang: "de"
       }
     });
 
-    const geoResult = geoResponse.data.results?.[0];
-    if (!geoResult) {
-      throw new NotFoundError(`Keine Ergebnisse fuer "${trimmedCity}" gefunden.`);
-    }
-
-    const forecastUrl = "https://api.open-meteo.com/v1/forecast";
-    const forecastResponse = await axios.get<ForecastResponse>(forecastUrl, {
-      params: {
-        latitude: geoResult.latitude,
-        longitude: geoResult.longitude,
-        current: "temperature_2m,apparent_temperature,weather_code,wind_speed_10m",
-        timezone: "auto"
-      }
-    });
-
-    const current = forecastResponse.data.current;
-    if (!current) {
-      throw new NotFoundError("Keine aktuellen Wetterdaten verfuegbar.");
-    }
-
-    const description =
-      weatherCodeDescriptions[current.weather_code] ?? "Keine Beschreibung verfuegbar";
-
+    // Die Antwort wird noch nicht ausgewertet, sondern ein Dummy-Objekt zurückgegeben
     return {
       location: {
-        name: geoResult.name,
-        country: geoResult.country,
-        latitude: geoResult.latitude,
-        longitude: geoResult.longitude
+        name: trimmedCity,
+        country: "OpenWeatherMap",
+        latitude: 0,
+        longitude: 0
       },
       current: {
-        temperatureC: current.temperature_2m,
-        feelsLikeC: current.apparent_temperature,
-        windSpeedKmh: current.wind_speed_10m,
-        description,
-        observedAt: current.time
+        temperatureC: 0,
+        feelsLikeC: 0,
+        windSpeedKmh: 0,
+        description: "Platzhalter von OpenWeatherMap API",
+        observedAt: new Date().toISOString()
       }
     };
   }
