@@ -90,9 +90,8 @@ export class WeatherService {
       return buildMockWeather(trimmedCity);
     }
 
-    // Placeholder: WeatherAPI.com API Beispielaufruf
+    // WeatherAPI.com API: Echte Wetterdaten auswerten
     // Dokumentation: https://www.weatherapi.com/docs/
-    // Hier wird nur ein Platzhalter-Request ausgeführt, die Antwort wird nicht verarbeitet
     const apiKey = process.env.WEATHERAPI_KEY || "DEMO_KEY";
     const weatherApiUrl = "https://api.weatherapi.com/v1/current.json";
     const weatherApiResponse = await axios.get(weatherApiUrl, {
@@ -103,20 +102,24 @@ export class WeatherService {
       }
     });
 
-    // Die Antwort wird noch nicht ausgewertet, sondern ein Dummy-Objekt zurückgegeben
+    const data = weatherApiResponse.data;
+    if (!data || !data.location || !data.current) {
+      throw new NotFoundError("Keine Wetterdaten von WeatherAPI.com erhalten.");
+    }
+
     return {
       location: {
-        name: trimmedCity,
-        country: "WeatherAPI.com",
-        latitude: 0,
-        longitude: 0
+        name: data.location.name,
+        country: data.location.country,
+        latitude: data.location.lat,
+        longitude: data.location.lon
       },
       current: {
-        temperatureC: 0,
-        feelsLikeC: 0,
-        windSpeedKmh: 0,
-        description: "Platzhalter von WeatherAPI.com API",
-        observedAt: new Date().toISOString()
+        temperatureC: data.current.temp_c,
+        feelsLikeC: data.current.feelslike_c,
+        windSpeedKmh: data.current.wind_kph,
+        description: data.current.condition?.text || "Keine Beschreibung",
+        observedAt: data.current.last_updated
       }
     };
   }
