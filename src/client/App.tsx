@@ -2,7 +2,7 @@ import { useState } from "react";
 import type { WeatherResult } from "../shared/weather";
 import { WeatherDetails } from "./components/WeatherDetails";
 
-const DEFAULT_CITIES = ["Berlin", "Hamburg", "Muenchen", "Koeln", "Frankfurt"];
+const DEFAULT_CITIES = ["Berlin", "Hamburg", "Muenchen", "Koeln", "Frankfurt", "Lingen"];
 
 type FetchState = "idle" | "loading" | "success" | "error";
 
